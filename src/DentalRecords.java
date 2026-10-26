@@ -241,7 +241,109 @@ public class DentalRecords {
     }
 
     public static void extractTooth(String[] familyNames, char[][][] familyTeeth) {
+        String memberName;
+        int memberIndex = -1;
+        String layerInput;
+        char layerSelection = 0;
+        int layerIndex = 0;
+        int toothNumber;
 
+        System.out.print("Which family member                         : ");
+
+        do {
+            memberName = keyboard.nextLine();
+            memberIndex = getFamilyMemberByName(familyNames, memberName);
+
+            if (memberIndex == -1) {
+                System.out.print("Invalid family member, try again            : ");
+            }
+
+        } while (memberIndex == -1);
+
+        System.out.print("Which tooth layer (U)pper or (L)ower        : ");
+
+        do {
+            layerInput = keyboard.nextLine();
+            layerInput = layerInput.replaceAll(" ", "");
+            layerInput = layerInput.toUpperCase();
+
+            layerSelection = layerInput.charAt(0);
+
+            if (layerInput.length() != 1 || (layerSelection != 'U' && layerSelection != 'L')) {
+                System.out.print("Invalid layer, try again                    : ");
+            }
+
+        } while (layerInput.length() != 1 || (layerSelection != 'U' && layerSelection != 'L'));
+
+        switch (layerSelection) {
+            case 'U':
+                layerIndex = UPPER_LAYER;
+                break;
+            case 'L':
+                layerIndex = LOWER_LAYER;
+                break;
+            default:
+                break;
+        }
+
+        System.out.print("Which tooth number                          : ");
+
+        do {
+            toothNumber = getInputIntegerSafely();
+
+            if (toothNumber < 1 || toothNumber > familyTeeth[memberIndex][layerIndex].length) {
+                System.out.print("Invalid tooth number, try again             : ");
+            } else if (familyTeeth[memberIndex][layerIndex][toothNumber - 1] == 'M') {
+                System.out.print("Missing tooth, try again                    : ");
+            }
+
+        } while (toothNumber < 1 || toothNumber > familyTeeth[memberIndex][layerIndex].length || familyTeeth[memberIndex][layerIndex][toothNumber - 1] == 'M');
+
+        //----Consume the leftover newline character
+        keyboard.nextLine();
+
+        familyTeeth[memberIndex][layerIndex][toothNumber - 1] = 'M';
+        System.out.println();
+    }
+
+    public static void reportRootCanals(char[][][] familyTeeth) {
+        int memberIndex;
+        int layer;
+        int toothIndex;
+        int incisorsCount = 0;
+        int bicuspidsCount = 0;
+        int missingCount = 0;
+        char currentTooth;
+        double discriminant;
+        double root1;
+        double root2;
+
+        for (memberIndex = 0; memberIndex < familyTeeth.length; memberIndex++) {
+
+            for (layer = 0; layer < NUMBER_OF_LAYERS; layer++) {
+                for (toothIndex = 0; toothIndex < familyTeeth[memberIndex][layer].length; toothIndex++) {
+                    currentTooth = familyTeeth[memberIndex][layer][toothIndex];
+
+                    if (currentTooth == 'I') {
+                        incisorsCount++;
+                    } else if (currentTooth == 'B') {
+                        bicuspidsCount++;
+                    } else if (currentTooth == 'M') {
+                        missingCount++;
+                    }
+                }
+            }
+
+        }
+
+        discriminant = (bicuspidsCount * bicuspidsCount) + (4.0 * incisorsCount * missingCount);
+        root1 = (-bicuspidsCount + Math.sqrt(discriminant)) / (2.0 * incisorsCount);
+        root2 = (-bicuspidsCount - Math.sqrt(discriminant)) / (2.0 * incisorsCount);
+
+        System.out.printf("One root canal at     %.2f", root1);
+        System.out.println();
+        System.out.printf("Another root canal at %.2f", root2);
+        System.out.println();
     }
 
     public static void displayMenu(String[] familyNames, char[][][] familyTeeth) {
@@ -275,7 +377,7 @@ public class DentalRecords {
                 extractTooth(familyNames, familyTeeth);
                 break;
             case 'R':
-                //reportRootCanals(familyTeeth);
+                reportRootCanals(familyTeeth);
                 break;
             case 'X':
                 System.out.println("\nExiting the Floridian Tooth Records :-)");
