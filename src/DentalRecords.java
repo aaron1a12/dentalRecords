@@ -59,10 +59,26 @@ public class DentalRecords {
     }
 
     public static int validateTeeth(String teeth) {
-        int errorCode = 0;
-        //for () {
+        int toothIndex;
+        char currentTooth;
 
-        //}
+        if (teeth.length() < 0) {
+            return STATUS_INVALID_TEETH_MIN;
+        }
+
+        teeth = teeth.toUpperCase();
+
+        for (toothIndex = 0; toothIndex < teeth.length(); toothIndex++) {
+            currentTooth = teeth.charAt(toothIndex);
+
+            if (currentTooth != 'I' && currentTooth != 'B' && currentTooth != 'M') {
+                return STATUS_INVALID_TEETH_TYPES;
+            }
+        }
+
+        if (teeth.length() > MAX_TEETH) {
+            return STATUS_INVALID_TEETH_MAX;
+        }
 
         return STATUS_SUCCESS;
     }
@@ -79,7 +95,7 @@ public class DentalRecords {
     }
 
     public static String getLayerName(int layerIndex) {
-        String name = "";
+        String name;
         switch (layerIndex) {
             case UPPER_LAYER:
                 name = "uppers";
@@ -112,12 +128,12 @@ public class DentalRecords {
     }
 
     public static void getFamilyData(String[] familyNames, char[][][] familyTeeth) {
+        int layer;
         int memberIndex;
         String name;
-        int layer;
+        String teeth;
         int teethStatusCode;
         int toothIndex;
-        String teeth;
 
         //----Loop through the family
         for (memberIndex = 0; memberIndex < familyNames.length; memberIndex++) {
@@ -144,13 +160,16 @@ public class DentalRecords {
                     teethStatusCode = validateTeeth(teeth);
 
                     switch (teethStatusCode) {
+
+                        case STATUS_INVALID_TEETH_MIN:
+                            System.out.print("Too few teeth              : ");
+                            break;
                         case STATUS_INVALID_TEETH_MAX:
                             System.out.print("Too many teeth, try again                   : ");
                             break;
                         case STATUS_INVALID_TEETH_TYPES:
-                        case STATUS_INVALID_TEETH_MIN:
                             System.out.print("Invalid teeth types, try again              : ");
-                            break;
+
                         default:
                             break;
                     }
@@ -158,6 +177,7 @@ public class DentalRecords {
 
                 //----Save the validated teeth into the 3D array
                 familyTeeth[memberIndex][layer] = new char[teeth.length()];
+
                 for (toothIndex = 0; toothIndex < teeth.length(); toothIndex++) {
                     familyTeeth[memberIndex][layer][toothIndex] =
                             Character.toUpperCase(teeth.charAt(toothIndex));
