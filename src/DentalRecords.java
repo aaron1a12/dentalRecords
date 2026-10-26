@@ -22,6 +22,19 @@ public class DentalRecords {
 
     //---------------------------------------------------------------------------------------------
 
+
+    public static int getInputIntegerSafely() {
+        int integer = -1;
+        try {
+            integer = keyboard.nextInt();
+        } catch (Exception e) {
+            keyboard.nextLine();
+            return -1;
+        }
+
+        return integer;
+    }
+
     public static boolean isNameValid(String name) {
         String temporaryString;
         int charIndex;
@@ -56,7 +69,7 @@ public class DentalRecords {
         }
 
         return true;
-    }
+    } // end of isNameValid
 
     public static int validateTeeth(String teeth) {
         int toothIndex;
@@ -81,7 +94,7 @@ public class DentalRecords {
         }
 
         return STATUS_SUCCESS;
-    }
+    } // end of validateTeeth
 
     public static String padSpaces(int size) {
         String string = "";
@@ -92,7 +105,7 @@ public class DentalRecords {
         }
 
         return string;
-    }
+    } // end of padSpaces
 
     public static String getLayerName(int layerIndex) {
         String name;
@@ -108,24 +121,25 @@ public class DentalRecords {
         }
 
         return name;
-    }
+    } // end of getLayerName
 
     public static int getFamilySize() {
         int familySize;
 
         System.out.print("Please enter number of people in the family : ");
-        familySize = keyboard.nextInt();
+
+        familySize = getInputIntegerSafely();
 
         while (familySize < MIN_PEOPLE || familySize > MAX_PEOPLE) {
             System.out.print("Invalid number of people, try again         : ");
-            familySize = keyboard.nextInt();
+            familySize = getInputIntegerSafely();
         }
 
         //----Consume the leftover newline character
         keyboard.nextLine();
 
         return familySize;
-    }
+    } // end of getFamilySize();
 
     public static void getFamilyData(String[] familyNames, char[][][] familyTeeth) {
         int layer;
@@ -188,6 +202,45 @@ public class DentalRecords {
 
     } // end of getFamilyData method
 
+    public static void displayMenu(String[] familyNames, char[][][] familyTeeth) {
+        String userInput;
+        char selection = 0;
+
+        do {
+            System.out.print("(P)rint, (E)xtract, (R)oot, e(X)it          : ");
+
+            userInput = keyboard.nextLine();
+            userInput = userInput.replaceAll(" ", "");
+            userInput = userInput.toUpperCase();
+
+            selection = userInput.charAt(0);
+
+            while (userInput.length() != 1 || (selection != 'P' && selection != 'E' && selection != 'R' && selection != 'X')) {
+
+                System.out.print("Invalid menu option, try again              : ");
+
+                userInput = keyboard.nextLine();
+                selection = userInput.isEmpty() ? ' ' : Character.toUpperCase(userInput.charAt(0));
+            }
+
+        } while (selection != 'X');
+
+        switch (selection) {
+            case 'P':
+                break;
+            case 'E':
+                break;
+            case 'R':
+                break;
+            case 'X':
+                System.out.println("\nExiting the Floridian Tooth Records :-)");
+                break;
+            default:
+                break;
+        }
+    }
+
+
     //-----------------------------------------------------------------------------
 
     public static void main(String[] args) {
@@ -204,12 +257,12 @@ public class DentalRecords {
         familyNames = new String[familySize];
         familyTeeth = new char[familySize][NUMBER_OF_LAYERS][];
 
+        //----Populate the familyTeeth records array
         getFamilyData(familyNames, familyTeeth);
 
-        //----Show the names for now
-        for (memberIndex = 0; memberIndex < familyNames.length; memberIndex++) {
-            System.out.println("[" + memberIndex + "] " + familyNames[memberIndex]);
-        }
+        //----Go to the menu
+        displayMenu(familyNames, familyTeeth);
+
     } // end of main method
 
     //-----------------------------------------------------------------------------
