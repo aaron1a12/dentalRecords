@@ -1,3 +1,4 @@
+import javax.print.DocFlavor;
 import java.util.Scanner;
 
 //=================================================================================================
@@ -202,6 +203,47 @@ public class DentalRecords {
 
     } // end of getFamilyData method
 
+    public static void printRecords(String[] familyNames, char[][][] familyTeeth) {
+        int memberIndex;
+        int layerIndex;
+        int toothIndex;
+        String layerName;
+
+        for (memberIndex = 0; memberIndex < familyNames.length; memberIndex++) {
+            System.out.println(familyNames[memberIndex]);
+
+            for (layerIndex = 0; layerIndex < NUMBER_OF_LAYERS; layerIndex++) {
+                layerName = getLayerName(layerIndex);
+                layerName = layerName.substring(0, 1).toUpperCase() + layerName.substring(1, layerName.length());
+
+                System.out.print("  " + layerName + ": ");
+
+                for (toothIndex = 0; toothIndex < familyTeeth[memberIndex][layerIndex].length; toothIndex++) {
+                    System.out.print(" " + (toothIndex + 1) + ":" + familyTeeth[memberIndex][layerIndex][toothIndex] + " ");
+                }
+            }
+        }
+        System.out.println();
+    }
+
+    public static int getFamilyMemberByName(String[] familyNames, String targetName) {
+        int memberIndex;
+
+        targetName = targetName.toUpperCase();
+
+        for (memberIndex = 0; memberIndex < familyNames.length; memberIndex++) {
+            if (familyNames[memberIndex].toUpperCase() == targetName) {
+                return memberIndex;
+            }
+        }
+
+        return -1;
+    }
+
+    public static void extractTooth(String[] familyNames, char[][][] familyTeeth) {
+
+    }
+
     public static void displayMenu(String[] familyNames, char[][][] familyTeeth) {
         String userInput;
         char selection = 0;
@@ -227,10 +269,13 @@ public class DentalRecords {
 
         switch (selection) {
             case 'P':
+                printRecords(familyNames, familyTeeth);
                 break;
             case 'E':
+                extractTooth(familyNames, familyTeeth);
                 break;
             case 'R':
+                //reportRootCanals(familyTeeth);
                 break;
             case 'X':
                 System.out.println("\nExiting the Floridian Tooth Records :-)");
