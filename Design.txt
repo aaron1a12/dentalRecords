@@ -1,0 +1,20 @@
+Dental Records - Program Design
+===============================
+
+1. Display welcome message
+
+2. Get family information:
+    2.1 Prompt and validate family count (1 to 6).
+
+    2.2 Set up the arrays to hold the record data:
+        String[] familyNames
+        char[][][] familyTeeth
+
+    2.3 Loop through the family members to populate records
+        2.3.1 Get names
+        2.3.2 Get uppers
+        2.3.3 Get lowers
+
+3. Display menu options:
+
+4. On exit, print smile
