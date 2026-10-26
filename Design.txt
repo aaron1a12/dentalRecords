@@ -10,11 +10,27 @@ Dental Records - Program Design
         String[] familyNames
         char[][][] familyTeeth
 
-    2.3 Loop through the family members to populate records
-        2.3.1 Get names
-        2.3.2 Get uppers
-        2.3.3 Get lowers
+    2.3 Loop through the family members to populate records:
+        2.3.1 Prompt and validate member's name, then store in familyNames.
+        2.3.2 Prompt and validate uppers (1 to 8 teeth; only 'I', 'B', 'M').
+        2.3.3 Prompt and validate lowers (1 to 8 teeth; only 'I', 'B', 'M').
+        2.3.4 Store validated upper and lower teeth in familyTeeth.
 
-3. Display menu options:
+3. Display menu options (loop until 'X' is selected):
+    3.1 Prompt and validate menu choice ('P', 'E', 'R', 'X').
 
-4. On exit, print smile
+    3.2 (P)rint records:
+        3.2.1 Loop through family members and print name, uppers, and lowers.
+
+    3.3 (E)xtract a tooth:
+        3.3.1 Prompt and validate family member name.
+        3.3.2 Prompt and validate tooth layer ('U' or 'L').
+        3.3.3 Prompt and validate tooth number (in range and not already 'M').
+        3.3.4 Update selected tooth to 'M' in familyTeeth.
+
+    3.4 (R)oot canal report:
+        3.4.1 Count total 'I', 'B', and 'M' teeth across the family.
+        3.4.2 Calculate roots of Ix^2 + Bx - M = 0 using quadratic formula.
+        3.4.3 Display both root canal indices to 2 decimal places.
+
+4. On exit ('X'), print smile message
